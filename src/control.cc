@@ -100,7 +100,6 @@ Control::~Control() {
 void
 Control::initialize() {
 
-  display::Canvas::use_gui(false);
   display::Canvas::initialize();
   display::Window::slot_schedule(rak::make_mem_fun(m_display, &display::Manager::schedule));
   display::Window::slot_unschedule(rak::make_mem_fun(m_display, &display::Manager::unschedule));

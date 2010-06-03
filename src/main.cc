@@ -71,6 +71,8 @@
 
 void do_panic(int signum);
 void print_help();
+void set_no_gui();
+void daemonize();
 void initialize_commands();
 
 int
@@ -80,6 +82,8 @@ parse_options(Control* c, int argc, char** argv) {
 
     // Converted.
     optionParser.insert_flag('h', sigc::ptr_fun(&print_help));
+    optionParser.insert_flag('u', sigc::ptr_fun(&set_no_gui)); // Hacky hack. :3 It pretty much intercepts the canvas code and stops ncurses from being initialized.
+    optionParser.insert_flag('f', sigc::ptr_fun(&daemonize)); // Forks to background :)
     optionParser.insert_flag('n', OptionParser::Slot());
 
     optionParser.insert_option('b', sigc::bind<0>(sigc::ptr_fun(&rpc::call_command_set_string), "bind"));
@@ -408,4 +412,21 @@ print_help() {
   std::cout << "Report bugs to <jaris@ifi.uio.no>." << std::endl;
 
   exit(0);
+}
+
+void
+daemonize() {
+
+   int i;
+   if ( i = fork() )
+   {
+      if ( i < 0 )
+         exit(1);
+      exit(0);
+   }
+}
+
+void 
+set_no_gui() {
+   display::Canvas::use_gui(false);
 }
