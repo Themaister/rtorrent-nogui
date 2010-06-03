@@ -48,9 +48,9 @@ class Canvas {
 public:
   typedef std::vector<Attributes> attributes_list;
 
-  Canvas(int x = 0, int y = 0, int width = 0, int height = 0) :
-    m_window(newwin(height, width, y, x)) {}
-  ~Canvas() { delwin(m_window); }
+  Canvas(int x = 0, int y = 0, int width = 0, int height = 0)
+    { if (m_use_gui) m_window = newwin(height, width, y, x); }
+  ~Canvas() { if (m_use_gui) delwin(m_window); }
 
   void                refresh()                                               { if (m_use_gui) wnoutrefresh(m_window); }
   static void         refresh_std()                                           { if (m_use_gui) wnoutrefresh(stdscr); }
@@ -104,7 +104,7 @@ public:
 
   // Initialize stdscr.
   static void         initialize();
-  static void         use_gui(bool in)                                                   { m_use_gui = in };
+  static void         use_gui(bool in)                                                   { m_use_gui = in; }
   static void         cleanup();
 
   static int          get_screen_width()                                      { if (m_use_gui) { int x, y; getmaxyx(stdscr, y, x); return x; } 
