@@ -46,15 +46,20 @@
 namespace display {
 
 bool Canvas::m_isInitialized = false;
+bool Canvas::m_use_gui = true;
 
 void
 Canvas::resize(int x, int y, int w, int h) {
+  if (!m_use_gui)
+    return;
   wresize(m_window, h, w);
   mvwin(m_window, y, x);
 }
 
 void
 Canvas::print_attributes(unsigned int x, unsigned int y, const char* first, const char* last, const attributes_list* attributes) {
+  if (!m_use_gui)
+    return;
   move(x, y);
 
   attr_t org_attr;
@@ -86,6 +91,9 @@ Canvas::print_attributes(unsigned int x, unsigned int y, const char* first, cons
 
 void
 Canvas::initialize() {
+  if (!m_use_gui)
+    return;
+
   if (m_isInitialized)
     return;
   
@@ -101,9 +109,12 @@ Canvas::initialize() {
 
 void
 Canvas::cleanup() {
+  if (!m_use_gui)
+    return;
+
   if (!m_isInitialized)
     return;
-  
+
   m_isInitialized = false;
 
   noraw();
@@ -112,6 +123,9 @@ Canvas::cleanup() {
 
 std::pair<int, int>
 Canvas::term_size() {
+  if (!m_use_gui)
+    return;
+
   struct winsize ws;
 
   if (ioctl(STDIN_FILENO, TIOCGWINSZ, &ws) == 0)
