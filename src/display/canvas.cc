@@ -124,7 +124,7 @@ Canvas::cleanup() {
 std::pair<int, int>
 Canvas::term_size() {
   if (!m_use_gui)
-    return;
+    return std::pair<int, int>(80, 24);
 
   struct winsize ws;
 

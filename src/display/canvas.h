@@ -63,11 +63,15 @@ public:
   static void         resize_term(int x, int y)                               { if (m_use_gui) resizeterm(y, x); }
   static void         resize_term(std::pair<int, int> dim)                    { if (m_use_gui) resizeterm(dim.second, dim.first); }
 
-  unsigned int        get_x()                                                 { if (m_use_gui) int x, y; getyx(m_window, y, x); return x; }
-  unsigned int        get_y()                                                 { if (m_use_gui) int x, y; getyx(m_window, y, x); return y; }
+  unsigned int        get_x()                                                 { if (m_use_gui) { int x, y; getyx(m_window, y, x); return x; }
+                                                                                       else return 0; }
+  unsigned int        get_y()                                                 { if (m_use_gui) { int x, y; getyx(m_window, y, x); return y; }
+                                                                                       else return 0; }
 
-  unsigned int        width()                                                 { if (m_use_gui) int x, y; getmaxyx(m_window, y, x); return x; }
-  unsigned int        height()                                                { if (m_use_gui) int x, y; getmaxyx(m_window, y, x); return y; }
+  unsigned int        width()                                                 { if (m_use_gui) { int x, y; getmaxyx(m_window, y, x); return x; }
+                                                                                       else return 80; }
+  unsigned int        height()                                                { if (m_use_gui) { int x, y; getmaxyx(m_window, y, x); return y; }
+                                                                                       else return 24; }
 
   void                move(unsigned int x, unsigned int y)                    { if (m_use_gui) wmove(m_window, y, x); }
 
@@ -103,8 +107,10 @@ public:
   static void         use_gui(bool in)                                                   { m_use_gui = in };
   static void         cleanup();
 
-  static int          get_screen_width()                                      { if (m_use_gui) int x, y; getmaxyx(stdscr, y, x); return x; }
-  static int          get_screen_height()                                     { if (m_use_gui) int x, y; getmaxyx(stdscr, y, x); return y; }
+  static int          get_screen_width()                                      { if (m_use_gui) { int x, y; getmaxyx(stdscr, y, x); return x; } 
+                                                                                       else return 80; }
+  static int          get_screen_height()                                     { if (m_use_gui) { int x, y; getmaxyx(stdscr, y, x); return y; }
+                                                                                    else return 24; }
 
   static std::pair<int, int> term_size();
 
